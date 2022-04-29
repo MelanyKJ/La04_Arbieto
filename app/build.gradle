@@ -6,7 +6,9 @@ plugins {
 android {
     compileSdk 32
 
-    buildFeatures{viewBinding true}
+    buildFeatures{
+        viewBinding true
+    }
 
     defaultConfig {
         applicationId "com.melany.myapplication_lab04_a"

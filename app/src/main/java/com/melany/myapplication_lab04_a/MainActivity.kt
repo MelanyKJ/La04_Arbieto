@@ -6,8 +6,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.melany.myapplication_lab04_a.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 const val ACTIVITY_A_REQUEST = 991
 const val ACTIVITY_B_REQUEST = 992
@@ -18,18 +18,27 @@ const val PARAMETER_EXTRA_CORREO_T = "correo"
 const val PARAMETER_EXTRA_TELEFONO_T = "telefono"
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var activityMainBinding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        val view = activityMainBinding.root
+        setContentView(view)
 
     }
 
     fun sendExplicit(view: android.view.View) {
-        val nombre = tvNombre.text.toString()
-        val apellido = tvApellido.text.toString()
-        val correo = tvCorreo.text.toString()
-        val telefono = tvTelefono.text.toString()
+        //Acceder a los componentes ui con kotlin extensions
+        //val nombre = tvNombre.text.toString()
+        //Acceder a los componentes ui con viewBinding
+        val nombre = activityMainBinding.tvNombre.text.toString()
+        //val apellido = tvApellido.text.toString()
+        val apellido= activityMainBinding.tvApellido.text.toString()
+        //val correo = tvCorreo.text.toString()
+        val correo = activityMainBinding.tvCorreo.text.toString()
+        //val telefono = tvTelefono.text.toString()
+        val telefono = activityMainBinding.tvTelefono.text.toString()
         validateInputFields(nombre, apellido, correo, telefono)
         goDetailActivity(nombre, apellido, correo, telefono)
 
@@ -92,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
     //LLAMADA EN UN TELEFONO
     fun calls_phone(view: android.view.View) {
-        val telefono = tvTelefono.text.toString()
+        val telefono = activityMainBinding.tvTelefono.text.toString()
         val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", telefono, null))
         startActivity(intent);
     }
@@ -100,12 +109,14 @@ class MainActivity : AppCompatActivity() {
     //MENSAJE A WSP
     fun MsgWhatsApp(view: View?) {
         try {
-            val telefono = tvTelefono.text.toString()
-            val text1 = "Hola soy"
-            val nombre = tvNombre.text.toString()
-            val text2 = " \uD83D\uDE4B\u200D♀ te mando este mensaje desde Android Studio ❤"
+            val telefono = activityMainBinding.tvTelefono.text.toString()
+            val nombre = activityMainBinding.tvNombre.text.toString()
+            val apellido = activityMainBinding.tvApellido.text.toString()
+            val correo = activityMainBinding.tvCorreo.text.toString()
+            val text1 = "Hola soy $nombre $apellido mi correo es $correo, mi telefono es $telefono " +
+                    "y \uD83D\uDE4B\u200D♀ te mando este mensaje desde Android Studio ❤"
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("http://api.whatsapp.com/send?phone=$telefono&text=$text1$nombre$text2")
+            intent.data = Uri.parse("http://api.whatsapp.com/send?phone=$telefono&text=$text1")
             startActivity(intent)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -114,8 +125,8 @@ class MainActivity : AppCompatActivity() {
 
     // MENSAJE SMS
     fun SmsMessage(view: android.view.View) {
-        val nombre = tvNombre.text.toString()
-        val telefono = tvTelefono.text.toString()
+        val nombre = activityMainBinding.tvNombre.text.toString()
+        val telefono = activityMainBinding.tvTelefono.text.toString()
         val uri = Uri.parse("smsto:$telefono")
         val it = Intent(Intent.ACTION_SENDTO, uri)
         it.putExtra(
@@ -125,4 +136,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(it)
     }
 }
+
+
 
